@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Digital - 8 Pages</title>
+    <style>
+        /* Design sombre et luxe pour restaurant */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f0f; color: #f1f1f1; text-align: center; margin: 0; padding: 10px; }
+        .container { max-width: 600px; margin: auto; padding-bottom: 80px; }
+        
+        /* Style des images du menu */
+        .menu-frame { position: relative; width: 100%; min-height: 400px; background: #222; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        img { width: 100%; display: block; transition: opacity 0.3s ease-in-out; }
+        
+        /* Barre de navigation fixe en bas pour mobile */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(20, 20, 20, 0.95); padding: 15px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; backdrop-filter: blur(10px); z-index: 100; }
+        
+        button { background: #d4af37; color: #000; border: none; padding: 12px 18px; border-radius: 5px; font-weight: bold; font-size: 14px; cursor: pointer; min-width: 90px; }
+        button:disabled { background: #444; color: #888; cursor: not-allowed; }
+        button.home { background: #f1f1f1; }
+        
+        #page-info { font-size: 14px; font-weight: bold; color: #d4af37; }
+        h2 { font-size: 1.2rem; margin: 10px 0; color: #d4af37; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Notre Carte</h2>
+    
+    <div class="menu-frame">
+        <img id="image-active" src="page1.png" alt="Page du menu">
+    </div>
+
+    <!-- La barre de navigation reste toujours visible en bas de l'écran -->
+    <div class="nav-bar">
+        <button class="home" onclick="allerAccueil()">🏠 Début</button>
+        <button id="btn-prev" onclick="imagePrecedente()" disabled>⬅ Précédent</button>
+        <div id="page-info">1 / 8</div>
+        <button id="btn-next" onclick="imageSuivante()">Suivant ➡</button>
+    </div>
+</div>
+
+<script>
+    // Configuration des 8 images
+    const images = [
+        "page1.png", "page2.png", "page3.png", "page4.png", 
+        "page5.png", "page6.png", "page7.png", "page8.png"
+    ];
+    
+    let currentIndex = 0;
+
+    // Récupération des éléments
+    const imgElement = document.getElementById("image-active");
+    const infoElement = document.getElementById("page-info");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+
+    function updateMenu() {
+        // Change l'image
+        imgElement.style.opacity = 0;
+        setTimeout(() => {
+            imgElement.src = images[currentIndex];
+            imgElement.style.opacity = 1;
+        }, 150);
+
+        // Met à jour le texte (ex: 2 / 8)
+        infoElement.innerText = `${currentIndex + 1} / ${images.length}`;
+
+        // Désactive les boutons si on est au début ou à la fin
+        btnPrev.disabled = (currentIndex === 0);
+        btnNext.disabled = (currentIndex === images.length - 1);
+        
+        // Remonte en haut de la page automatiquement pour voir le haut de l'image
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function imageSuivante() {
+        if (currentIndex < images.length - 1) {
+            currentIndex++;
+            updateMenu();
+        }
+    }
+
+    function imagePrecedente() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateMenu();
+        }
+    }
+
+    function allerAccueil() {
+        currentIndex = 0;
+        updateMenu();
+    }
+</script>
+
+</body>
+</html>
